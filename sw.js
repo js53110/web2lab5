@@ -62,7 +62,6 @@ let syncSnaps = async function () {
       let snap = entry[1];
       let title = snap.title;
       let id = snap.id;
-      console.log(title);
       await fetch("/saveSnap", {
         method: "POST",
         headers: {
@@ -88,7 +87,7 @@ let syncSnaps = async function () {
 
 self.addEventListener("notificationclick", function (event) {
   let notification = event.notification;
-  console.log("notification", notification);
+  //console.log("notification", notification);
 
   event.waitUntil(
     clients.matchAll().then(function (clis) {

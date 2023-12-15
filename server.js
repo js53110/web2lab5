@@ -23,8 +23,6 @@ try {
 }
 
 app.post("/saveSubscription", function (req, res) {
-  console.log("In server.js");
-  console.log(req.body);
   let sub = req.body.sub;
   subscriptions.push(sub);
   fs.writeFileSync(SUBS_FILENAME, JSON.stringify(subscriptions));

@@ -39,10 +39,30 @@
         </div>
     </nav>
 
-    <button id="subID">Subscribe</button>
+
+    <button id="subID" style="border: 2px solid black; border-radius: 5px; margin: 10px;">Subscribe</button>
+
+    <div style="font-weight: bold;">Demonstracija PWA</div>
+    <div>
+        <p style="font-weight: bold;">Implementirano:</p>
+        <ul>
+            <li>Subscribe - pritiskom na tipku korisnik se pretplacuje na obavijesti</li>
+            <li>Caching - app shell se cache-ira (index.html, app.js, fallback stranica)</li>
+            <li>Dynamic caching - sve stranice koje se posjete se cache-iraju</li>
+            <li>Camera api</li>
+            <li>Fallback metoda - ako kamera nije dostupna ili je blokirana - omogucen upload slike</li>
+            <li>Background sync - ukoliko se uslika ili uploada slika dok internet nije dostupan, sprema se u IndexedDB
+                i sinkronizira se nakon ponovnog spajanja na internet</li>
+            <li>Slikanjem/uploadanjem slike okida se background sync te se salje push obavijest korisnicima koji su
+                pretplaceni</li>
+
+        </ul>
+    </div>
+
+
     <script src="/app.js"></script>
     <script src="/push.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="lab">
     </script>
 
 </body>

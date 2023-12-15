@@ -165,7 +165,6 @@
                     canvas
                         .getContext("2d")
                         .drawImage(cameraAvailable ? player : image, 0, 0, canvas.width, canvas.height);
-                        console.log(inputImage);
                        stopCapture();
                 });
             document
@@ -207,8 +206,6 @@
                                 console.log(error);
                             });
                     } else {
-                        // fallback
-                        // pokusati poslati, pa ako ima mreze onda dobro...
                         alert("TODO - vaš preglednik ne podržava bckg sync...");
                     }
                 });
