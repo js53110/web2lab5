@@ -10,29 +10,55 @@
         crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
     <link rel="manifest" href="/manifest.json" />
+    <style>
+        body {
+            padding-top: 56px;
+            /* Adjusted to accommodate the fixed navbar */
+        }
+
+
+
+        #snapPhoto {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        #titleHeader {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #btnSnap {
+            margin-top: 20px;
+        }
+
+        #btnUpload {
+            margin-top: 20px;
+        }
+
+        #snapName {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Your existing file input element -->
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Web2-Lab5 PWA</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                Web2-Lab5 PWA
-            </a>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="camera.html">Camera</a>
+                        <a class="nav-link" href="camera.html">Camera</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">About</a>
@@ -45,171 +71,26 @@
     <div id="snapPhoto" class="d-flex flex-column align-items-center">
         <h3 id="titleHeader">Take a beautiful image:</h3>
         <div id="beforeSnap" class="d-flex flex-column align-items-center">
-            <video id="player" width="100%" autoplay></video>
+            <video id="player" class="w-100" autoplay></video>
             <button class="btn btn-primary mt-2" id="btnSnap">
                 <i class="bi bi-camera"></i>
                 Snap
             </button>
             <input type="file" id="fileInput" style="display: none;">
-
-            <!-- Button to trigger file input dialog -->
-
         </div>
         <div id="afterSnap" class="d-none">
-            <canvas id="cnvFood"></canvas>
-            <input id="snapName" type="text" class="form-control mt-2" placeholder="give it a catchy name..." />
+            <canvas id="cnvFood" class="mt-3"></canvas>
+            <input id="snapName" type="text" class="form-control mt-2" placeholder="Give it a catchy name..." />
             <button class="btn btn-success" id="btnUpload">
                 <i class="bi bi-cloud-upload"></i>
                 Upload
             </button>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
-    <script type="module">
-
-        let inputImage = document.getElementById("fileInput")
-        let image;
-        let cameraAvailable = true;
-        
-        inputImage.addEventListener("change", async (e)=>{
-        image = inputImage.files[0]
-        inputImage.value = ""
-        image = await fileToImage(image)
-        document.getElementById("btnSnap").click()
-        })
-
-        function fileToImage(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = function (event) {
-            const img = new Image();
-            img.src = event.target.result;
-
-            img.onload = function () {
-                resolve(img);
-            };
-
-            img.onerror = function (error) {
-                reject(error);
-            };
-        };
-
-        reader.onerror = function (error) {
-            reject(error);
-        };
-
-        // Read the file as a data URL
-        reader.readAsDataURL(file);
-    });
-}
-       
-        import {
-                get,
-                set,
-            } from "https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm";
-
-            let player = document.getElementById("player");
-            let canvas = document.getElementById("cnvFood");
-            let beforeSnap = document.getElementById("beforeSnap");
-            let afterSnap = document.getElementById("afterSnap");
-            let snapName = document.getElementById("snapName");
-            let startCapture = function () {                
-                beforeSnap.classList.remove("d-none");
-                beforeSnap.classList.add("d-flex", "flex-column", "align-items-center");
-                afterSnap.classList.remove("d-flex", "flex-column", "align-items-center");
-                afterSnap.classList.add("d-none");
-                if (!("mediaDevices" in navigator)) {
-                    // fallback to file upload button, ili sl.
-                    // vidjet i custom API-je: webkitGetUserMedia i mozGetUserMedia
-                    cameraAvailable = false;
-                    document.getElementById("btnSnap").style.display = "none"
-
-
-                } else {
-                    navigator.mediaDevices
-                        .getUserMedia({ video: true, audio: false })
-                        .then((stream) => {
-                            player.srcObject = stream;
-                        })
-                        .catch((err) => {
-                            let titleHeader = document.getElementById("titleHeader")
-                            titleHeader.innerHTML = "Cam not working, upload img"
-                            cameraAvailable = false;
-                            inputImage.style.display = "block"
-                            document.getElementById("btnSnap").style.display = "none"
-
-                            //console.log(err);
-                        });
-                }
-            };
-            startCapture();
-            let stopCapture = function () {
-                afterSnap.classList.remove("d-none");
-                afterSnap.classList.add("d-flex", "flex-column", "align-items-center");
-                beforeSnap.classList.remove("d-flex", "flex-column", "align-items-center");
-                beforeSnap.classList.add("d-none");
-                if(cameraAvailable){
-                    player.srcObject.getVideoTracks().forEach(function (track) {
-                    track.stop();
-                });
-                }
-               
-            }
-            document
-                .getElementById("btnSnap")
-                .addEventListener("click", function (event) {
-                    canvas.width = player.getBoundingClientRect().width;
-                    canvas.height = player.getBoundingClientRect().height;                    
-                    canvas
-                        .getContext("2d")
-                        .drawImage(cameraAvailable ? player : image, 0, 0, canvas.width, canvas.height);
-                       stopCapture();
-                });
-            document
-                .getElementById("btnUpload")
-                .addEventListener("click", function (event) {
-                    event.preventDefault();
-                    if (!snapName.value.trim()) {
-                        alert("Give it a cathcy name!");
-                        return false;
-                    }
-                    if (
-                        "serviceWorker" in navigator &&
-                        "SyncManager" in window
-                    ) {
-                        let url = canvas.toDataURL();
-                        fetch(url)
-                            .then((res) => res.blob())
-                            .then((blob) => {
-                                let ts = new Date().toISOString();
-                                let id = ts + snapName.value.replace(/\s/g, '_');  // ws->_
-                                set(id, {
-                                    id,
-                                    ts,
-                                    title: snapName.value,
-                                    image: blob
-                                });
-                                return navigator.serviceWorker.ready;
-                            })
-                            .then((swRegistration) => {
-                                return swRegistration.sync.register(
-                                    "sync-snaps"
-                                );
-                            })
-                            .then(() => {
-                                console.log("Queued for sync");
-                                startCapture();
-                            })
-                            .catch((err) => {
-                                console.log(error);
-                            });
-                    } else {
-                        alert("TODO - vaš preglednik ne podržava bckg sync...");
-                    }
-                });
-        </script>
+    <script type="module" src="/camera.js"></script>
 </body>
 
 </html>

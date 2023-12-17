@@ -34,6 +34,7 @@ self.addEventListener("fetch", (e) => {
         return (
           res ||
           fetch(e.request).then(async (fetchRes) => {
+            if (fetchRes.status !== 200) throw error;
             const cache = await caches.open(dynamicCacheName);
             cache.put(e.request.url, fetchRes.clone());
             return fetchRes;
@@ -41,10 +42,7 @@ self.addEventListener("fetch", (e) => {
         );
       })
       .catch(() => {
-        if (e.request.url.indexOf(".html") > -1) {
-          //ako html postoji (znaci trazimo url) onda nema index -1
-          return caches.match("/fallback.html");
-        }
+        return caches.match("/fallback.html");
       })
   );
 });

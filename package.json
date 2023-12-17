@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "serve": "npm i && npm start server.js"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "fs-extra": "^11.2.0",
